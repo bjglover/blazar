@@ -1,0 +1,22 @@
+BLAZAR 1.0.0
+Copyright (C) 2026 Dog Lab Plugins and BLAZAR contributors.
+GNU Affero General Public License, version 3 only.
+You may redistribute and modify the covered software under that licence.
+No warranty is provided. See LICENSE, sections 15 and 16.
+Corresponding Source and build instructions: SOURCE.md.
+
+JUCE 8.0.12
+Copyright (c) Raw Material Software Limited.
+Used under its AGPLv3 option; original notices retained.
+
+VST3 SDK 3.8.0
+Copyright (c) 2025 Steinberg Media Technologies GmbH.
+MIT licence; full root and component notices in third-party-notices/.
+VST is a trademark of Steinberg Media Technologies GmbH.
+No Steinberg logo or endorsement is claimed.
+
+This software is based in part on the work of the Independent JPEG Group.
+
+JUCE also incorporates FLAC, Ogg/Vorbis, libpng, zlib, HarfBuzz and SheenBidi.
+Their complete upstream notices are retained in third-party-notices/.
+These components retain their own licences and disclaimers.

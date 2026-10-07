@@ -1,11 +1,13 @@
-# Licensing status — decision required before publication
+# BLAZAR licensing
 
-No licence is granted here for BLAZAR's original source or artwork. The owner must choose and approve the release terms before publishing source or binaries.
+Copyright (C) 2026 Dog Lab Plugins and BLAZAR contributors.
 
-- **JUCE 8.0.12:** AGPLv3 / JUCE commercial dual licensing. No commercial entitlement is recorded. Using the AGPL route requires compliant licensing of the combined work and provision of Corresponding Source, build instructions and required notices for recipients. A public GitHub repository alone does not establish compliance. If choosing commercial JUCE terms, confirm the applicable entitlement and select separate project distribution terms. Do not claim the complete plugin is MIT-only.
-- **Bundled VST3 SDK 3.8.0:** MIT; retain the Steinberg notice. This permits the SDK's use under either JUCE route.
-- **JUCE embedded dependencies:** FLAC and Ogg/Vorbis (BSD), JPEG (IJG), PNG and zlib (zlib), HarfBuzz (Old MIT), SheenBidi (Apache 2.0), plus JUCE's platform support. Collected upstream notices accompany the candidate binary. ASIO is disabled by JUCE's default; AAX, AU, Android Oboe, LV2, OpenGL and JavaScript are not enabled targets/modules of this Windows VST3 build.
-- **Artwork:** generated using a user-supplied visual reference. No independent permission record for that reference is present. Confirm ownership/permission and approve distribution terms for `Assets/BlazarAccretion.png`; generation does not establish rights to the reference.
-- **Original DSP/presets:** local provenance records original implementations and procedural factory content, with no copied synthesizer code, samples, fonts or preset packs. These records are not an independent ownership audit.
+BLAZAR's original source, tests, build scripts, documentation and project artwork are released under the **GNU Affero General Public License, version 3 only (AGPL-3.0-only)**, to the extent copyright applies. The complete, unmodified licence is in LICENSE. You may use, modify and redistribute the covered work under those terms. There is no warranty; see sections 15 and 16.
 
-Official terms: https://juce.com/legal/juce-8-licence/ and https://www.gnu.org/licenses/agpl-3.0.html . Third-party terms apply independently; see `third-party-notices/`.
+JUCE **8.0.12**, commit `29396c22c93392d6738e021b83196283d6e4d850`, is used under its **AGPLv3 option**. No commercial JUCE licence is needed for this compliant open-source distribution. The combined software is distributed under AGPLv3; compatible third-party components retain their own copyright, permission and disclaimer notices. This is not an MIT-only plugin. The intended download is free, but AGPL permits commercial redistribution under its terms; no noncommercial restriction is added.
+
+VST3 SDK **3.8.0** is MIT licensed. Steinberg's root and component notices are retained in third-party-notices/. Other compiled dependencies are FLAC and Ogg/Vorbis (BSD-style), IJG JPEG (IJG terms), libpng (libpng licence), zlib (zlib), HarfBuzz (Old MIT), and SheenBidi (Apache-2.0). NOTICE and the original upstream files preserve their acknowledgements and terms.
+
+Assets/BlazarAccretion.png was generated for this project from a project-specific OpenAI/ChatGPT-generated reference. The owner confirmed the reference was not copied from a third-party artist, website or commercial product, and authorizes the open-source release. Assets/ARTWORK.md records the provenance. The original mockup remains excluded. No external font, sample library or preset pack is distributed.
+
+See SOURCE.md for exact Corresponding Source and build instructions, and LICENSING_AUDIT.md for the audited scope. Third-party licences are not overwritten by this project's grant. No trademark ownership or third-party endorsement is claimed.

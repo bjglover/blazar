@@ -4,6 +4,12 @@
 !/README.md
 !/CMakeLists.txt
 !/LICENSE.md
+!/LICENSE
+!/NOTICE
+!/SOURCE.md
+!/LICENSING_AUDIT.md
+!/.gitmodules
+!/dependencies/
 !/PROVENANCE.md
 !/RELEASE_NOTES.md
 !/build.ps1

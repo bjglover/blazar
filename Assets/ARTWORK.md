@@ -1,5 +1,7 @@
 # Artwork provenance
 
-`BlazarAccretion.png` was created with an image-generation tool using a user-supplied BLAZAR GUI mockup as a visual reference. The requested image was an astronomical accretion disc with orange/gold light, blue-white opposing jets and a deep-space background, without interface controls, text, logos or watermarks. JUCE embeds this PNG in the plugin; no external artwork file is needed at runtime.
+On 2026-10-07 the project owner confirmed that the local reference `Blazar-GUI-Mockup.png` was generated specifically for this project with OpenAI/ChatGPT image generation at their request. It was not copied from a third-party artist, website or commercial product.
 
-The reference mockup is excluded from the public source set. Confirm the owner's rights to use and derive from that reference, and approve distribution of the generated image before publication. No separately downloaded fonts or artwork are bundled.
+`Assets/BlazarAccretion.png` was subsequently generated for BLAZAR using that project-specific generated mockup as a visual reference. It depicts an astronomical accretion disc and jets, without interface controls, text, logos or font artwork. The owner authorizes its inclusion in the AGPLv3 open-source release, to the extent copyright applies. It is embedded in the plugin using JUCE BinaryData.
+
+The original reference is local only: untracked, absent from Git history, ignored, and excluded from repository/release distributions. Only the final embedded PNG is distributed. Interface controls use original vector styling and native JUCE components; fonts come from the operating system and no font files are bundled. Generation provenance is recorded without claiming exclusive copyright in machine-generated material.

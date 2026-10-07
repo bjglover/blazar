@@ -8,7 +8,7 @@ Close your DAW. Extract the release ZIP and copy the **entire Blazar.vst3 folder
 
 User patches are stored in `%APPDATA%\Dog Lab Plugins\Blazar\User Patches`. Factory programs are embedded. This release has its own plugin identity; legacy Quasar sessions are not migrated.
 
-If your host reports missing Microsoft C++ runtime DLLs, install the current [Microsoft Visual C++ v14 x64 Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist). This candidate was built on Windows 10; other Windows/DAW combinations have not been certified.
+If your host reports missing Microsoft C++ runtime DLLs, install the current [Microsoft Visual C++ v14 x64 Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist). This release was built on Windows 10; other Windows/DAW combinations have not been certified.
 
 ## Build Windows x64 Release
 
@@ -19,10 +19,12 @@ git clone --branch 8.0.12 https://github.com/juce-framework/JUCE.git C:/dev/JUCE
 ./build.ps1 -JucePath C:/dev/JUCE
 ```
 
-Run in a Visual Studio developer shell. The script configures an x64 build, builds the plugin and validation tools, then runs CTest. Output: `build-release/Blazar_artefacts/Release/VST3/Blazar.vst3`. Copy the whole bundle. JUCE is not downloaded automatically. The prepared plugin version is **1.0.0**; the proposed Git tag is **v1.0.0** (not created).
+Run in a Visual Studio developer shell. The script configures an x64 build, builds the plugin and validation tools, then runs CTest. Output: `build-release/Blazar_artefacts/Release/VST3/Blazar.vst3`. Copy the whole bundle. JUCE is not downloaded automatically. Release version: **1.0.0**, tag **v1.0.0**.
 
 Pure DSP checks can be built without JUCE with `cmake -S . -B build-dsp -DQUASAR_DSP_ONLY=ON`, followed by a Release build and `ctest --test-dir build-dsp -C Release --output-on-failure`.
 
 ## Licensing
 
-Publication is pending the owner's licensing and artwork decisions. See [LICENSE.md](LICENSE.md) and [PROVENANCE.md](PROVENANCE.md). No project-wide open-source licence has been selected. Third-party notices are in `third-party-notices/`.
+Free and open source under **AGPL-3.0-only**, without warranty. See [LICENSE](LICENSE), [licensing details](LICENSE.md) and [NOTICE](NOTICE). JUCE 8.0.12 uses its AGPLv3 option; VST3 SDK 3.8.0 and other dependencies retain their compatible original notices.
+
+Exact Corresponding Source, including the pinned JUCE submodule and build instructions, is described in [SOURCE.md](SOURCE.md). Use `git submodule update --init --recursive` after cloning, then `./build.ps1 -JucePath "$PWD/dependencies/JUCE"`. The binary ZIP includes source-access directions and licences, without a dependency snapshot. Artwork provenance is in [Assets/ARTWORK.md](Assets/ARTWORK.md).
