@@ -1,6 +1,6 @@
 # BLAZAR
 
-A procedural physical modelling synthesizer by Dog Lab Plugins for Windows x64 VST3 hosts. Forty factory programs combine four interacting worlds: MATTER resonators and exciters, harmonic FIELD structures, stochastic PARTICLES, and turbulent PLASMA. Coupling, evolution, tempo pulse and spatial diffusion shape the result. No sample library is required.
+A procedural physical modelling synthesizer for Windows x64 VST3 hosts. Forty factory programs combine four interacting worlds: MATTER resonators and exciters, harmonic FIELD structures, stochastic PARTICLES, and turbulent PLASMA. Coupling, evolution, tempo pulse and spatial diffusion shape the result. No sample library is required.
 
 ## Install on Windows
 
