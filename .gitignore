@@ -1,0 +1,35 @@
+# Public source allowlist. Historical experiments remain local.
+/*
+!/.gitignore
+!/README.md
+!/CMakeLists.txt
+!/LICENSE.md
+!/PROVENANCE.md
+!/RELEASE_NOTES.md
+!/build.ps1
+!/Source/
+!/Assets/
+!/Tests/
+!/third-party-notices/
+/Assets/*
+!/Assets/BlazarAccretion.png
+!/Assets/ARTWORK.md
+/Tests/*
+!/Tests/DynamicsCheck.cpp
+!/Tests/DynamicsBench.cpp
+!/Tests/ReducedSmoke.cpp
+!/Tests/FieldProbe.cpp
+!/Tests/BlazarPluginCheck.cpp
+!/Tests/BlazarEditorCheck.cpp
+# Defence in depth for generated files anywhere.
+**/build*/
+**/__pycache__/
+*.pyc
+*.log
+*.pdb
+*.obj
+*.zip
+.vs/
+.idea/
+.vscode/
+.env*
