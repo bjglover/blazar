@@ -26,8 +26,8 @@ jobs:
       - name: Check both architectures and bundle signatures
         run: |
           for bundle in build-macos/Blazar_artefacts/Release/VST3/Blazar.vst3 build-macos/Blazar_artefacts/Release/AU/Blazar.component; do
-            lipo -verify_arch arm64 "$bundle/Contents/MacOS/Blazar"
-            lipo -verify_arch x86_64 "$bundle/Contents/MacOS/Blazar"
+            lipo "$bundle/Contents/MacOS/Blazar" -verify_arch arm64
+            lipo "$bundle/Contents/MacOS/Blazar" -verify_arch x86_64
             codesign --verify --strict "$bundle"
           done
       - name: Install and validate Audio Unit
