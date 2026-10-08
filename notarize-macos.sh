@@ -55,8 +55,9 @@ developer_id_requirement='anchor apple generic and certificate 1[field.1.2.840.1
 verify_plugins() {
     local name
     for name in Blazar.vst3 Blazar.component; do
+        # The '=' prefix makes this literal requirement text, not a filename.
         codesign --verify --deep --strict --all-architectures \
-            --test-requirement "$developer_id_requirement" --verbose=2 "$1/$name"
+            --test-requirement "=$developer_id_requirement" --verbose=2 "$1/$name"
     done
 }
 

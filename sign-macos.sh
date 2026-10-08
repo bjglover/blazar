@@ -11,6 +11,7 @@ identity (certificate name or SHA-1 fingerprint) from your local Keychain.
 Defaults: BUILD_DIR=<checkout>/build-macos, OUTPUT_DIR=<build-dir>/signed
 OUTPUT_DIR must not exist. The original build products are left untouched.
 List available identities with: security find-identity -v -p codesigning
+Apple Development certificates cannot be used for this distribution workflow.
 EOF
 }
 
@@ -24,8 +25,20 @@ fi
 [[ "$(uname -s)" == Darwin ]] || fail "This script requires macOS."
 
 identity="$1"
-[[ "$identity" == 'Developer ID Application: '* || "$identity" =~ ^[[:xdigit:]]{40}$ ]] ||
-    fail "Use a Developer ID Application certificate name or its SHA-1 fingerprint."
+identity_name="$identity"
+if [[ "$identity" =~ ^[[:xdigit:]]{40}$ ]]; then
+    # A fingerprint selects a certificate; it does not establish its type.
+    identities="$(security find-identity -v -p codesigning)" ||
+        fail "Could not list signing identities in Keychain."
+    identity_name="$(awk -v fingerprint="$identity" '
+        toupper($2) == toupper(fingerprint) {
+            sub(/^[^"]*"/, ""); sub(/"[^"]*$/, ""); print; exit
+        }
+    ' <<< "$identities")"
+    [[ -n "$identity_name" ]] || fail "No valid signing identity matches fingerprint $identity in Keychain."
+fi
+[[ "$identity_name" == 'Developer ID Application: '* ]] ||
+    fail "Use a Developer ID Application certificate name or its SHA-1 fingerprint. Apple Development certificates cannot be used for distribution/notarization. See README.md for certificate setup."
 
 project_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 build_dir="${2:-$project_dir/build-macos}"
@@ -65,8 +78,9 @@ for relative_bundle in "${bundles[@]}"; do
     # These bundles contain one executable each, with no nested code to sign.
     # Replacing the build's ad-hoc signature signs every architecture present.
     codesign --force --sign "$identity" --timestamp --options runtime "$bundle"
+    # The '=' prefix makes this literal requirement text, not a filename.
     codesign --verify --deep --strict --all-architectures \
-        --test-requirement "$developer_id_requirement" --verbose=2 "$bundle"
+        --test-requirement "=$developer_id_requirement" --verbose=2 "$bundle"
 done
 
 # Carry the license texts and source/build information into the distribution.

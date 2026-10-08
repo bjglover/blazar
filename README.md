@@ -136,6 +136,8 @@ A universal build contains both architectures, but CTest runs the native archite
 
 Two optional scripts prepare the AU and VST3 for distribution outside the Mac App Store. Run them locally after building and testing; CI does not invoke them. You need an Apple Developer Program membership, a **Developer ID Application** certificate with its private key in your local Keychain, and Xcode with `notarytool` and `stapler` available through `xcrun`. Both steps need internet access, including signing's secure timestamp request.
 
+An **Apple Development** certificate is for development and cannot be used for this distribution/notarization workflow. Passing its SHA-1 fingerprint still selects the same development certificate. Create a **Developer ID Application** certificate for your enrolled team in Xcode's account settings under **Manage Certificates → +**, or follow [Apple's Developer ID certificate instructions](https://developer.apple.com/help/account/certificates/create-developer-id-certificates/). Creating a local Developer ID certificate requires the team's Account Holder role; a free Personal Team cannot create one. After creation, the certificate and its private key must be available in your local Keychain.
+
 Find your signing identity, then sign copies of both Release bundles:
 
 ```sh
