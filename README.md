@@ -17,7 +17,7 @@ It isn't an emulation of an existing instrument. Pick an object, give it energy,
 
 Both downloads are available under **Assets** on the [GitHub Releases page](https://github.com/bjglover/blazar/releases). You can also [build the Mac plugins from source](#macos).
 
-Special thanks to [NothanUmber](https://github.com/NothanUmber) for the macOS port, cross-platform build and test tooling, and bug fixes.
+Thanks to [NothanUmber](https://github.com/NothanUmber) for the macOS port, cross-platform build testing and bug fixes.
 
 ![BLAZAR synthesizer interface](blazarpic.jpg)
 
