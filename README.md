@@ -87,6 +87,6 @@ JUCE **8.0.12** is pinned to commit `29396c22c93392d6738e021b83196283d6e4d850`. 
 
 BLAZAR is free and open source under **AGPL-3.0-only**, without warranty. See [LICENSE](LICENSE), [licensing details](LICENSE.md) and [NOTICE](NOTICE).
 
-JUCE 8.0.12 uses its AGPLv3 option. VST3 SDK 3.8.0 and other dependencies retain their compatible original notices. [Artwork provenance](Assets/ARTWORK.md) is documented; the original reference mockup is excluded from distribution.
+JUCE 8.0.12 uses its AGPLv3 option. VST3 SDK 3.8.0 and other dependencies retain their compatible original notices.
 
 Made by **Dog Lab Plugins**.
