@@ -13,6 +13,10 @@
 !/PROVENANCE.md
 !/RELEASE_NOTES.md
 !/build.ps1
+!/build-macos.sh
+!/sign-macos.sh
+!/notarize-macos.sh
+!/.github/
 !/Source/
 !/Assets/
 !/Tests/
@@ -27,6 +31,7 @@
 !/Tests/FieldProbe.cpp
 !/Tests/BlazarPluginCheck.cpp
 !/Tests/BlazarEditorCheck.cpp
+!/Tests/BlazarProcessorCheck.cpp
 # Defence in depth for generated files anywhere.
 **/build*/
 **/__pycache__/

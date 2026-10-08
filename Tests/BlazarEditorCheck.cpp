@@ -1,13 +1,30 @@
 #include "../Source/Processor.h"
 #include "../Source/UserPatches.h"
+#include <chrono>
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
 #include <set>
 #include <thread>
+void runProcessorChecks(Processor&);
 void require(bool x,const char* m){if(!x)throw std::runtime_error(m);}
 juce::Component* find(juce::Component& root,const juce::String& id){if(root.getComponentID()==id)return &root;for(auto* c:root.getChildren())if(auto* result=find(*c,id))return result;return nullptr;}
 void pump(){juce::MessageManager::getInstance()->runDispatchLoopUntil(150);}
+
+template <typename Predicate>
+bool pumpUntil(Predicate ready, std::chrono::milliseconds timeout = std::chrono::seconds(5)) {
+ // GUI timers can be delayed on busy CI runners. Wait for the observable result
+ // while dispatching messages, with a monotonic deadline for broken updates.
+ const auto deadline = std::chrono::steady_clock::now() + timeout;
+ while (!ready()) {
+  if (std::chrono::steady_clock::now() >= deadline)
+   return false;
+  if (!juce::MessageManager::getInstance()->runDispatchLoopUntil(10))
+   return ready();
+ }
+ return true;
+}
+
 void inventory(juce::Component& root,std::set<juce::String>& ids){if(root.getComponentID().startsWith("param:"))ids.insert(root.getComponentID().substring(6));for(auto* c:root.getChildren())inventory(*c,ids);}
 void parameterControls(juce::Component& root,std::vector<juce::Component*>& controls){if(root.getComponentID().startsWith("param:"))controls.push_back(&root);for(auto* c:root.getChildren())parameterControls(*c,controls);}
 struct AudioWorker {
@@ -26,6 +43,9 @@ struct AutomationObserver final:juce::AudioProcessorParameter::Listener {
 };
 int main(int argc,char** argv){try{
  juce::ScopedJuceInitialiser_GUI init;Processor p;p.prepareToPlay(48000,256);
+ if(argc==2&&juce::String(argv[1])=="--processor-smoke"){
+  runProcessorChecks(p);return 0;
+ }
  if(argc==3&&juce::String(argv[1])=="--pulse-gui"){
   blazar::UserPatches legacy(p,juce::File(argv[2]));require(legacy.load("ANOMALIES","Gravitational Stutter").wasOk(),"older user patch loads without file changes");require(std::abs(p.parameters().getRawParameterValue("pulseRate")->load()-2.f)<1e-5,"old discrete pulse rate mapped to continuous frequency");
   auto* editor=p.createEditorIfNeeded();auto* slider=dynamic_cast<juce::Slider*>(find(*editor,"param:pulseRate"));require(slider&&slider->getSliderStyle()==juce::Slider::RotaryHorizontalVerticalDrag,"rotary rate control");slider->setValue(1.137,juce::sendNotificationSync);require(std::abs(p.parameters().getRawParameterValue("pulseRate")->load()-1.137f)<1e-5,"rate knob continuous APVTS attachment");
@@ -68,6 +88,7 @@ int main(int argc,char** argv){try{
   std::cout<<"PASS quick custom GUI/header/Factory protection/empty and populated bank deletion"<<std::endl;
   std::cout<<"PASS user banks/save/save-as/overwrite/load/delete: all "<<expected.size()<<" parameter values restored"<<std::endl;return 0;
  }
+ require(juce::Desktop::getInstance().getDisplays().getPrimaryDisplay()!=nullptr,"EditorCheck requires a graphical desktop session (use CTest -LE gui when headless)");
  juce::AudioBuffer<float> audio(2,256);juce::MidiBuffer midi;auto block=[&]{p.processBlock(audio,midi);for(int c=0;c<2;++c)for(int n=0;n<256;++n)require(std::isfinite(audio.getSample(c,n))&&std::abs(audio.getSample(c,n))<.951,"finite bounded audio");};
  auto deleteEditor=[&p](juce::AudioProcessorEditor* e){if(e){p.editorBeingDeleted(e);delete e;}};
  std::unique_ptr<juce::AudioProcessorEditor,decltype(deleteEditor)> editor(p.createEditorIfNeeded(),deleteEditor);require(editor&&editor->getWidth()>=960&&editor->getWidth()<=1200,"custom editor");editor->setName("BLAZAR editor validation");editor->addToDesktop(juce::ComponentPeer::windowIsTemporary);editor->setTopLeftPosition(0,0);editor->setVisible(true);editor->toFront(true);
@@ -86,8 +107,44 @@ int main(int argc,char** argv){try{
  }
  std::cout<<"PASS "<<changed<<" attachment IDs: GUI->parameter isolation, host->GUI"<<std::endl;
  auto* programs=dynamic_cast<juce::ComboBox*>(find(*editor,"program"));require(programs&&programs->getNumItems()==40,"40 program selector");
- for(int i=0;i<40;++i){programs->setSelectedId(i+1,juce::sendNotificationSync);pump();require(p.getCurrentProgram()==i,"GUI program");verify();p.setCurrentProgram((i+7)%40);pump();if(programs->getSelectedId()!=(i+7)%40+1)std::cout<<"PROGRAM_REFRESH i "<<i<<" processor "<<p.getCurrentProgram()<<" combo "<<programs->getSelectedId()<<" expected "<<(i+7)%40+1<<std::endl;require(programs->getSelectedId()==(i+7)%40+1,"host program->GUI");verify();}
+ for(int i=0;i<40;++i){
+  programs->setSelectedId(i+1,juce::sendNotificationSync);
+  pump();require(p.getCurrentProgram()==i,"GUI program");verify();
+  const int hostProgram=(i+7)%40;
+  p.setCurrentProgram(hostProgram);
+  const bool refreshed=pumpUntil([&]{return programs->getSelectedId()==hostProgram+1;});
+  if(!refreshed)
+   std::cout<<"PROGRAM_REFRESH i "<<i<<" processor "<<p.getCurrentProgram()<<" combo "<<programs->getSelectedId()<<" expected "<<hostProgram+1<<std::endl;
+  require(refreshed,"host program->GUI timed out after 5 seconds");
+  verify();
+ }
  std::cout<<"PASS 40 GUI/host programs refresh every attachment"<<std::endl;
+ // Reproduce the selector state after a user patch load without touching the
+ // user's real patch library. User patches do not change the factory index.
+ p.setCurrentProgram(0);
+ auto* banks=dynamic_cast<juce::ComboBox*>(find(*editor,"patchBank"));
+ require(banks&&pumpUntil([&]{return banks->getSelectedId()==1&&programs->getSelectedId()==1;}),"factory setup for recall checks");
+ auto selectUserPatch=[&]{
+  banks->addItem("Review Test Bank",9001);banks->setSelectedId(9001,juce::dontSendNotification);
+  programs->clear(juce::dontSendNotification);programs->addItem("Review User Patch",1);programs->setSelectedId(1,juce::dontSendNotification);
+  p.parameters().getParameter("matter")->setValueNotifyingHost(.123f);
+ };
+ selectUserPatch();p.setCurrentProgram(0);
+ require(pumpUntil([&]{return banks->getSelectedId()==1&&programs->getText()==p.getProgramName(0);}),"same-index host recall must clear user patch selection");
+ verify();
+ juce::MemoryBlock recalledState;p.getStateInformation(recalledState);
+ selectUserPatch();p.setStateInformation(recalledState.getData(),int(recalledState.getSize()));
+ require(pumpUntil([&]{return banks->getSelectedId()==1&&programs->getText()==p.getProgramName(0);}),"same-index state restore must clear user patch selection");
+ selectUserPatch();p.setCurrentProgram(0);
+ auto* saveButton=dynamic_cast<juce::TextButton*>(find(*editor,"savePatch"));require(saveButton,"Save button exists");
+ saveButton->onClick(); // Deliberately do not dispatch the refresh timer first.
+ require(banks->getSelectedId()==1,"Save used stale user patch selection after host recall");
+ auto* modals=juce::ModalComponentManager::getInstance();
+ require(modals->getNumModalComponents()>0,"Factory Save should ask for a new patch name");
+ modals->cancelAllModalComponents();
+ require(pumpUntil([&]{return modals->getNumModalComponents()==0;}),"close test Save dialog");
+ verify();
+ std::cout<<"PASS same-index recall/state refresh and immediate Save protection"<<std::endl;
  auto* forceSlider=dynamic_cast<juce::Slider*>(find(*editor,"param:force"));
  {AutomationObserver observer(*p.parameters().getParameter("force"));auto point=forceSlider->getLocalBounds().getCentre().toFloat();auto now=juce::Time::getCurrentTime();
   auto mouse=[&](juce::ModifierKeys mods){return juce::MouseEvent(juce::Desktop::getInstance().getMainMouseSource(),point,mods,1,0,0,0,0,forceSlider,forceSlider,now,point,now,1,false);};
