@@ -10,9 +10,14 @@ It isn't an emulation of an existing instrument. Pick an object, give it energy,
 
 > Don't remove instability. Make instability playable.
 
-**[Download BLAZAR v1.0.0 for Windows](https://github.com/bjglover/blazar/releases/tag/v1.0.0)** · Free and open source · Windows 10/11 · 64-bit VST3
+**[Download BLAZAR for Windows and macOS](https://github.com/bjglover/blazar/releases/tag/v1.0.0)** · Free and open source
 
-macOS users can [build VST3 and Audio Unit plugins from source](#macos). The macOS build supports Apple Silicon and Intel; the v1.0.0 download above is Windows-only.
+- **Windows 10/11:** 64-bit VST3 instrument.
+- **macOS 11 or newer:** VST3 and Audio Unit (AU) instruments for Apple Silicon and Intel Macs. The downloadable Mac build has been signed and notarized.
+
+Both downloads are available under **Assets** on the [GitHub Releases page](https://github.com/bjglover/blazar/releases). You can also [build the Mac plugins from source](#macos).
+
+Special thanks to [NothanUmber](https://github.com/NothanUmber) for the macOS port, cross-platform build and test tooling, and bug fixes.
 
 <!-- Screenshot location: add a real capture of the released v1.0.0 interface here.
 Existing local captures show an older RATE dropdown; v1.0.0 uses a rotary control.
@@ -65,7 +70,11 @@ User patches use the same `.blazar.json` format on both platforms. Copy bank fol
 
 ## Download and install
 
-**Requirements:** Windows 10/11, 64-bit, and a VST3 host. BLAZAR is an instrument plugin; no standalone application is included. The release was built and validated on Windows 10 using the project's test host. No formal DAW certification is claimed.
+BLAZAR is an instrument plugin for compatible DAWs. There is no standalone application. No formal certification across DAWs is claimed.
+
+### Windows installation
+
+**Requirements:** Windows 10/11 (64-bit) and a compatible VST3 host. The original Windows release was built and validated on Windows 10 using the project's test host.
 
 1. [Open the v1.0.0 release](https://github.com/bjglover/blazar/releases/tag/v1.0.0) and download `BLAZAR-1.0.0-Windows-x64-VST3.zip`.
 2. Close your DAW and extract the ZIP.
@@ -74,9 +83,26 @@ User patches use the same `.blazar.json` format on both platforms. Copy bank fol
 
 If your host reports missing Microsoft C++ runtime DLLs, install the [Microsoft Visual C++ v14 x64 Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist).
 
+### macOS installation
+
+**Requirements:** macOS 11 or newer, an Apple Silicon or Intel Mac, and a compatible VST3 or AU host.
+
+1. [Open the v1.0.0 release](https://github.com/bjglover/blazar/releases/tag/v1.0.0) and download `Blazar-V1.0_macOS.zip`.
+2. Close your DAW and extract the ZIP.
+3. Copy the complete plugin bundle or bundles into your user plugin folders:
+   - **VST3:** `Blazar.vst3` → `~/Library/Audio/Plug-Ins/VST3/`
+   - **Audio Unit:** `Blazar.component` → `~/Library/Audio/Plug-Ins/Components/`
+4. Restart your DAW and rescan plugins if needed. Logic Pro and GarageBand use Audio Units; other compatible DAWs can use VST3.
+
+The downloadable macOS build is signed and notarized. You do **not** need an Apple Developer account to install it. The original `v1.0.0` source tag predates the Mac port and its later fixes; see [Source versions and releases](#source-versions-and-releases).
+
 ## Open source and building
 
 Curious about the physics? The source is here to explore, modify and rebuild.
+
+### Source versions and releases
+
+The original `v1.0.0` Git tag corresponds to the initial Windows source release and predates the macOS port and later bug fixes. The macOS download was prepared from a newer source revision. Accordingly, downloading the `v1.0.0` tag alone will **not** reproduce that Mac build. For reproducible Mac builds, use a checkout that includes the merged macOS changes, and refer to the `SOURCE.md` bundled inside the Mac ZIP for its source information. A future release should tag the exact shared source revision used for both Windows and macOS binaries.
 
 ### Windows
 
@@ -133,6 +159,8 @@ If a newly installed Audio Unit is not discovered, close your audio hosts and ru
 A universal build contains both architectures, but CTest runs the native architecture of the current machine. Validate on Intel and on the oldest supported macOS before publishing a release; a successful build or `auval` run does not establish compatibility with every DAW.
 
 #### Local signing and notarization
+
+These instructions are for developers preparing their own macOS distribution builds. If you downloaded the official signed and notarized Mac ZIP, you do not need to perform these steps.
 
 Two optional scripts prepare the AU and VST3 for distribution outside the Mac App Store. Run them locally after building and testing; CI does not invoke them. You need an Apple Developer Program membership, a **Developer ID Application** certificate with its private key in your local Keychain, and Xcode with `notarytool` and `stapler` available through `xcrun`. Both steps need internet access, including signing's secure timestamp request.
 
