@@ -205,4 +205,4 @@ BLAZAR is free and open source under **AGPL-3.0-only**, without warranty. See [L
 
 JUCE 8.0.12 uses its AGPLv3 option. VST3 SDK 3.8.0 and other dependencies retain their compatible original notices.
 
-Made by **Dog Lab Plugins**.
+Made by **Dog Lab Plugins** using vibe coding.
