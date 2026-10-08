@@ -67,8 +67,6 @@ Save your discoveries as user patches and organise them into named banks. Factor
 
 If your host reports missing Microsoft C++ runtime DLLs, install the [Microsoft Visual C++ v14 x64 Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist).
 
-BLAZAR has its own plugin identity. Legacy Quasar sessions are not migrated.
-
 ## Open source and building
 
 Curious about the physics? The source is here to explore, modify and rebuild.
