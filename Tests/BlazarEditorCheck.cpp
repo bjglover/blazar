@@ -68,6 +68,7 @@ int main(int argc,char** argv){try{
   std::cout<<"PASS quick custom GUI/header/Factory protection/empty and populated bank deletion"<<std::endl;
   std::cout<<"PASS user banks/save/save-as/overwrite/load/delete: all "<<expected.size()<<" parameter values restored"<<std::endl;return 0;
  }
+ require(juce::Desktop::getInstance().getDisplays().getPrimaryDisplay()!=nullptr,"EditorCheck requires a graphical desktop session (use CTest -LE gui when headless)");
  juce::AudioBuffer<float> audio(2,256);juce::MidiBuffer midi;auto block=[&]{p.processBlock(audio,midi);for(int c=0;c<2;++c)for(int n=0;n<256;++n)require(std::isfinite(audio.getSample(c,n))&&std::abs(audio.getSample(c,n))<.951,"finite bounded audio");};
  auto deleteEditor=[&p](juce::AudioProcessorEditor* e){if(e){p.editorBeingDeleted(e);delete e;}};
  std::unique_ptr<juce::AudioProcessorEditor,decltype(deleteEditor)> editor(p.createEditorIfNeeded(),deleteEditor);require(editor&&editor->getWidth()>=960&&editor->getWidth()<=1200,"custom editor");editor->setName("BLAZAR editor validation");editor->addToDesktop(juce::ComponentPeer::windowIsTemporary);editor->setTopLeftPosition(0,0);editor->setVisible(true);editor->toFront(true);
