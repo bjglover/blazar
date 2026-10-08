@@ -23,6 +23,8 @@ Special thanks to [NothanUmber](https://github.com/NothanUmber) for the macOS po
 Existing local captures show an older RATE dropdown; v1.0.0 uses a rotary control.
 Do not use Blazar-GUI-Mockup.png or substitute the standalone artwork for a plugin screenshot. -->
 
+![BLAZAR synthesizer interface](blazarpic.jpg)
+
 ## Four worlds, one instrument
 
 Each world has its own character. The interesting things happen when they meet.
