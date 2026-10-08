@@ -19,10 +19,6 @@ Both downloads are available under **Assets** on the [GitHub Releases page](http
 
 Special thanks to [NothanUmber](https://github.com/NothanUmber) for the macOS port, cross-platform build and test tooling, and bug fixes.
 
-<!-- Screenshot location: add a real capture of the released v1.0.0 interface here.
-Existing local captures show an older RATE dropdown; v1.0.0 uses a rotary control.
-Do not use Blazar-GUI-Mockup.png or substitute the standalone artwork for a plugin screenshot. -->
-
 ![BLAZAR synthesizer interface](blazarpic.jpg)
 
 ## Four worlds, one instrument
